@@ -1,5 +1,9 @@
 html { font-size: 6.25%; }
 body{ font-size: 16rem; margin: 0; padding: 0; background-color: #252330; overflow: hidden;}
+
+.you-suck{width: 100vw; height: 100vh; background: #000; position: fixed;z-index: 100; display: flex; justify-content: center; align-items: center; text-align: center;}
+.you-suck p{font-size: 100rem; color: #fff; font-family: 'Press Start 2P', cursive;}
+
 .dark-bg{width: 100vw; height: 100vh; background: #000; opacity: 0.5; position: absolute;z-index: 95; }
 .container{width: 100vw; height: 100vh; background: url('star_background.svg'); background-size: cover;}
 .header { width: 100%; display: flex; justify-content: center; align-items: center; padding-top: 100px; }
