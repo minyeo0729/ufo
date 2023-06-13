@@ -1,31 +1,33 @@
 /* define variables */
-const boss = document.querySelector(".star-svg");
-const home = document.querySelector(".home-svg");
-const ufo = document.querySelector(".ufo");
-const introTxt = document.querySelector(".intro-text");
-const inputField = document.querySelector(".answer-field");
-const word = document.querySelector(".word-away");
+const Selector = (classname) => {
+  return document.querySelector(classname)
+}
+const boss = Selector(".star-svg");
+const home = Selector(".home-svg");
+const ufo = Selector(".ufo");
+const introTxt = Selector(".intro-text");
+const inputField = Selector(".answer-field");
+const word = Selector(".word-away");
 const door = document.getElementById("path3817");
 const doorred = document.getElementById("path3813");
-const background = document.querySelector(".dark-bg");
-const question = document.querySelector(".question");
-const youSuck = document.querySelector(".you-suck");
-const youSuckTxt = document.querySelector('.you-suck > p')
-const answerBox = document.querySelector(".answer-box");
-const btnYes = document.querySelector(".btn-yes");
-const btnNo = document.querySelector(".btn-no");
+const background = Selector(".dark-bg");
+const question = Selector(".question");
+const youSuck = Selector(".you-suck");
+const youSuckTxt = Selector('.you-suck > p')
+const answerBox = Selector(".answer-box");
+const btnYes = Selector(".btn-yes");
 
-const babyWidth = document.querySelector(".baby").getBoundingClientRect().width;
-const babyHeight = document .querySelector(".baby").getBoundingClientRect().height;
-const ufoHeight = document.querySelector(".ufo").getBoundingClientRect().height;
-const ufoWidth = document.querySelector(".ufo").getBoundingClientRect().width;
+const babyWidth = Selector(".baby").getBoundingClientRect().width;
+const babyHeight = Selector(".baby").getBoundingClientRect().height;
+const ufoWidth = Selector(".ufo").getBoundingClientRect().width;
+const ufoHeight = Selector(".ufo").getBoundingClientRect().height;
 
-const babewrap = document.querySelector(".babies");
-const blue = document.querySelector(".baby-blue");
-const yellow = document.querySelector(".baby-yellow");
-const red = document.querySelector(".baby-red");
-const green = document.querySelector(".baby-green");
-const orange = document.querySelector(".baby-orange");
+const babewrap = Selector(".babies");
+const blue = Selector(".baby-blue");
+const yellow = Selector(".baby-yellow");
+const red = Selector(".baby-red");
+const green = Selector(".baby-green");
+const orange = Selector(".baby-orange");
 const babies = [blue, yellow, red, green, orange];
 const ufoTL = gsap.timeline();
 const homeTL = gsap.timeline();
@@ -35,31 +37,36 @@ let started = false;
 let changevalue = 0;
 let rightAnswer = 0;
 let wrongAnswer = 0;
-let formondone = false;
 
 /* game setting */
 gsap.fromTo(introTxt, 1, { opacity: 0, scaleX: 0 }, { opacity: 1, scaleX: 1 });
 gsap.fromTo(answerBox, 2, { autoAlpha: 0 }, { autoAlpha: 1 });
-gsap.set(youSuck, {autoAlpha: 0})
-babies.forEach((item, index) => {
-  gsap.set(item, { x: 150 * index, y: -Math.random() * 120 });
-});
 
-/* game ignored */
-btnNo.addEventListener("click", () => {});
+babies.forEach((item, index) => {
+  let windowSize = window.innerWidth;
+  let babySize = 80
+  if(windowSize < 540){
+    babySize = 0
+    gsap.set(item, { x: babySize * index, y: -Math.random() * 80 });
+  }else if(windowSize < 860){
+    babySize = 10
+    gsap.set(item, {  x: babySize * index, y: -Math.random() * 120 });
+  }else{
+    gsap.set(item, { x: babySize * index, y: -Math.random() * 120 });
+  }
+});
 
 /* game started */
 btnYes.addEventListener("click", () => {
   started = true;
   word.classList.add("hide");
-  gsap.to(inputField, 0.1, { autoAlpha: 1 });
+  gsap.to(inputField, { autoAlpha: 1});
   handleQuestion(0);
   inputField.focus();
-  //   document.querySelector('.word').style.borderColor = '#DF3E3E'
 });
 
-const quiz = [ "1. 날마다 흑심을 품고 다니는 것은?", "2. 닿기만 하면 취하는 술은?", "3. 목수도 고칠 수 없는 집은?", "4. 눈이 녹으면 뭐가 될까?", "5. 세상에서 가장 빠른 닭은?", ];
-const answers = ["연필", "입술", "고집", "눈물", "후다닥"];
+const quiz = [ "1 + 1", "2 + 2", "3 + 3", "4 + 4", "5 + 5" ];
+const answers = ["2", "4", "6", "8", "10"];
 
 if ((started = true)) {
 inputField.addEventListener("change", (e) => {
@@ -88,22 +95,12 @@ inputField.addEventListener("change", (e) => {
 
 /* motion */
 function snatch(baby) {
-  const eyes = [baby.getElementById('ellipse4603'),baby.getElementById('ellipse4636'),baby.getElementById('ellipse4605'),baby.getElementById('ellipse4638')]
-
   bebebe.shift();
   wrongAnswer++;
 
   ufoTL
     .set(ufo, { x: -500, y: -ufoHeight })
     .to("#beam", { scaleY: 0, onStart: startStyle})
-
-    // .to(babies, {rotate: -2, repeat: -1, yoyo: true , ease: Sine.easeInOut})
-    // .to(babies, {rotate: 2, repeat: -1, yoyo: true , ease: Sine.easeInOut})
-    // .to(eyes, {x: -1, y: -1, yoyo: true , ease: Sine.easeInOut})
-    // .to(eyes, {x: 1, y: -1, yoyo: true , ease: Sine.easeInOut, onComplete: endshake})
-
-    
-
     .to(ufo, 2, { opacity: 1, x: whereBabyAtX(baby), y: whereBabyAtY(baby) })
     .to("#beam", 0.3, { scaleY: 1, opacity: 1 })
     .to("#lights > *", { ease: "sine.inOut", fill: "#BF40BF", duration: 0.3, stagger: { each: 0.2, from: "center", yoyo: true, repeat: 5 }, })
@@ -116,7 +113,7 @@ function snatch(baby) {
       homeTL.to(question, { autoAlpha: 0},"-=2.2");
     }
     if(wrongAnswer == 5){
-      homeTL.to(youSuck, {autoAlpha: 1, delay: 5})
+      homeTL.to(youSuck, {display:"flex", delay: 5})
     }
 }
 
@@ -137,11 +134,10 @@ function goHome(baby) {
       question.innerHTML = `You saved ${rightAnswer} babies!`;
     }
     if(rightAnswer == 5){
-      homeTL.to(youSuck, {autoAlpha: 1, delay: 5})
+      homeTL.to(youSuck, {display: "flex", delay: 5})
       youSuckTxt.innerHTML = 'AMAZING!!';
     }
 }
-
 
 /* functions */
 function handleQuestion(index) {
@@ -174,13 +170,3 @@ function resetStyle() {
   inputField.removeAttribute("disabled");
   inputField.focus();
 }
-
-/**RND
- * - gohome에서 베이비 움직일때 모션 repeat안쓰고 계속해서 동작하는거 뭔지 
- * 
- * - snatch에서 베이비들 y 올라가기전에 눈 뱅글뱅글 
- * - snatching 되는 동안만 rotate -2 , 2 
- * - 무시하기 눌렀을때 > 베이비들 자기 자리에서 ufo위치로 소집됨
- * - 타이머 추가
- * - 끝나고 refresh()함수, 배열 클린업이라던지 처음으로 돌아가게! 
- */
